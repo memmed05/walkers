@@ -1,4 +1,4 @@
 package com.example.walkers.dto.like;
 
-public class GetLikesOfPostByIdRequest {
+public record GetLikesOfPostByIdRequest()  {
 }

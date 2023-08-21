@@ -1,4 +1,4 @@
-package com.example.walkers.util;
+package com.example.walkers.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

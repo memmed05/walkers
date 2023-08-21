@@ -1,24 +1,34 @@
 package com.example.walkers.dto.user;
 
+import com.example.walkers.model.Role;
+import com.example.walkers.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserRegisterRequest {
-
-    @Size(min = 3)
-    private String username;
-    @Email(message = "Invalid email format")
-    private String email;
-    @Size(min = 8)
-    private String password;
-    @Size(min = 8)
-    private String RePassword;
+public record UserRegisterRequest(
+        @Size(min = 3)
+        String username,
+        @Email(message = "Invalid email format")
+        String email,
+        @Size(min = 8)
+        String password,
+        @Size(min = 8)
+        String rePassword
+) {
+    public static User toEntity(UserRegisterRequest request, String password) {
+        return new User(
+                null,
+                null,
+                null,
+                request.username(),
+                request.email(),
+                password,
+                Role.USER,
+                false,
+                null,
+                null,
+                null,
+                null
+        );
+    }
 }

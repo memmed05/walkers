@@ -1,15 +1,20 @@
 package com.example.walkers.dto.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Comment;
+import com.example.walkers.model.Post;
+import com.example.walkers.model.User;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class SaveCommentRequest {
-
-    private String comment;
+public record SaveCommentRequest(
+        String comment
+) {
+    public static Comment convertToEnt(SaveCommentRequest request, Post post, User user) {
+        return new Comment(
+                null,
+                null,
+                null,
+                request.comment,
+                post,
+                user
+        );
+    }
 }

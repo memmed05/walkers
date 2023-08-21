@@ -1,20 +1,33 @@
 package com.example.walkers.dto.post;
 
+import com.example.walkers.model.Post;
+import com.example.walkers.model.User;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class PostSaveDto {
+public record PostSaveDto(
+        @NotBlank
+        String postUrl,
+        @Nullable
+        String description
+) {
+    public static Post toEntity(PostSaveDto post, User user) {
+        return new Post(
+                null,
+                null,
+                null,
+                post.postUrl,
+                post.description,
+                null,
+                null,
+                user
+        );
+    }
 
-    @NotBlank
-    private String postUrl;
-    @Nullable
-    private String description;
+    public static PostSaveDto toGet(Post post) {
+        return new PostSaveDto(
+                post.getPostUrl(),
+                post.getDescription()
+        );
+    }
 }

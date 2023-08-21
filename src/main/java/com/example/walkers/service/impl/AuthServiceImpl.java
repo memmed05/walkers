@@ -2,9 +2,9 @@ package com.example.walkers.service.impl;
 
 import com.example.walkers.dto.login.LoginRequest;
 import com.example.walkers.dto.login.LoginResponse;
+import com.example.walkers.security.TokenGenerator;
 import com.example.walkers.service.AuthService;
 import com.example.walkers.service.UserService;
-import com.example.walkers.util.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,11 +24,9 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
             );
-            return LoginResponse.builder()
-                    .token(tokenGenerator.generateToken(authentication))
-                    .build();
+            return new LoginResponse(tokenGenerator.generateToken(authentication));
         } catch (Exception e) {
             throw new BadCredentialsException("Bad Credentials");
         }

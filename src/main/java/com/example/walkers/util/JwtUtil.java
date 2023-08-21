@@ -1,7 +1,7 @@
 package com.example.walkers.util;
 
+import com.example.walkers.security.TokenGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

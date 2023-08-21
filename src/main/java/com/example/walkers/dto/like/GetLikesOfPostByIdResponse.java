@@ -1,15 +1,14 @@
 package com.example.walkers.dto.like;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Like;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class GetLikesOfPostByIdResponse {
+import java.util.List;
 
-    private Integer likes;
+public record GetLikesOfPostByIdResponse(
+        Integer likes
+) {
+
+    public static GetLikesOfPostByIdResponse convert(List<Like> likes) {
+        return new GetLikesOfPostByIdResponse(likes.size());
+    }
 }

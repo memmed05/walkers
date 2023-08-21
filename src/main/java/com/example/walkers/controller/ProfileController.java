@@ -27,14 +27,12 @@ public class ProfileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GetProfileResponse> getProfileById(@PathVariable UUID id) {
-        return ResponseEntity.ok(profileService.getProfileById(IdRequest.builder()
-                .id(id)
-                .build()));
+        return ResponseEntity.ok(profileService.getProfileById(new IdRequest(id)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SaveProfileResponse> updateProfile(@Valid @RequestBody SaveProfileRequest saveProfileRequest,
-                                                             @PathVariable UUID id){
-        return ResponseEntity.ok(profileService.updateProfile(saveProfileRequest,id));
+                                                             @PathVariable UUID id) {
+        return ResponseEntity.ok(profileService.updateProfile(saveProfileRequest, id));
     }
 }

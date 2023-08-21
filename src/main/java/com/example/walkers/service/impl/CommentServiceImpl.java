@@ -7,7 +7,6 @@ import com.example.walkers.dto.comment.GetCommentsOfPostByIdResponse;
 import com.example.walkers.dto.comment.SaveCommentRequest;
 import com.example.walkers.exception.CommentNotFoundException;
 import com.example.walkers.exception.PostNotFoundException;
-import com.example.walkers.mapsturct.CommentMapstruct;
 import com.example.walkers.model.Comment;
 import com.example.walkers.model.Post;
 import com.example.walkers.model.User;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,7 +32,6 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final CommentMapstruct commentMapstruct;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -48,25 +47,25 @@ public class CommentServiceImpl implements CommentService {
             return new PostNotFoundException("Post not found by id");
         });
         User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
-        Comment comment = commentRepository.save(commentMapstruct.toEntity(request, post, user));
+        Comment comment = commentRepository.save(SaveCommentRequest.convertToEnt(request, post, user));
         Optional<List<Comment>> optionalComments = commentRepository.findCommentByPost(comment.getPost());
         List<Comment> comments = new ArrayList<>();
         if (optionalComments.isPresent()) {
             comments = optionalComments.get();
         }
-        return commentMapstruct.mapToComments(comments);
+        return comments.stream()
+                .map(GetCommentsOfPostByIdResponse::convertToGetReponse)
+                .toList();
     }
 
     @Override
     public IdResponse deleteComment(IdRequest request) {
         User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
-        commentRepository.findByIdAndUser(request.getId(), user).orElseThrow(() -> {
-            log.error("Comment not found by id: " + request.getId());
+        commentRepository.findByIdAndUser(request.id(), user).orElseThrow(() -> {
+            log.error("Comment not found by id: " + request.id());
             return new CommentNotFoundException("Comment not found by id");
         });
-        commentRepository.deleteById(request.getId());
-        return IdResponse.builder()
-                .id(request.getId())
-                .build();
+        commentRepository.deleteById(request.id());
+        return new IdResponse(request.id());
     }
 }

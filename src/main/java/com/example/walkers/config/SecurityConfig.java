@@ -1,8 +1,8 @@
 package com.example.walkers.config;
 
-import com.example.walkers.util.JwtAccessDeniedHandler;
-import com.example.walkers.util.JwtAuthenticationEntryPoint;
-import com.example.walkers.util.JwtFilter;
+import com.example.walkers.security.JwtAccessDeniedHandler;
+import com.example.walkers.security.JwtAuthenticationEntryPoint;
+import com.example.walkers.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .cors().and()
-                .authorizeHttpRequests((auth) -> {
+                .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/v1/auth/login").permitAll();
                     auth.requestMatchers("/api/v1/user/register").permitAll();
                     auth.requestMatchers("/api/v1/comment/**",

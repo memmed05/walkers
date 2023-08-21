@@ -1,20 +1,25 @@
 package com.example.walkers.dto.post;
 
 import com.example.walkers.dto.comment.GetCommentsOfPostByIdResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Post;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class GetPostById {
 
-    private String postUrl;
-    private String description;
-    private List<GetCommentsOfPostByIdResponse> comments;
+public record GetPostById(
+        String postUrl,
+        String description,
+        List<GetCommentsOfPostByIdResponse> comments
+) {
+    public static GetPostById getPost(Post post) {
+        List<GetCommentsOfPostByIdResponse> commentsOfPostById = post.getComments().stream()
+                .map(GetCommentsOfPostByIdResponse::convertToGetReponse)
+                .toList();
+        return new GetPostById(
+                post.getPostUrl(),
+                post.getDescription(),
+                commentsOfPostById
+        );
+    }
 }

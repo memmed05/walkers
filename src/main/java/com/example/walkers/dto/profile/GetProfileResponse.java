@@ -1,19 +1,21 @@
 package com.example.walkers.dto.profile;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Profile;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class GetProfileResponse {
-
-    private String name;
-    private String surname;
-    private String patronymic;
-    private String bio;
-    private String ppUrl;
+public record GetProfileResponse(
+        String name,
+        String surname,
+        String patronymic,
+        String bio,
+        String ppUrl
+) {
+    public static GetProfileResponse mapToGet(Profile profile) {
+        return new GetProfileResponse(
+                profile.getName(),
+                profile.getSurname(),
+                profile.getPatronymic(),
+                profile.getBio(),
+                profile.getPpUrl()
+        );
+    }
 }

@@ -6,12 +6,12 @@ import com.example.walkers.dto.user.UserRegisterResponse;
 import com.example.walkers.exception.EmailAlreadyTakenException;
 import com.example.walkers.exception.PasswordDoesntMatchException;
 import com.example.walkers.exception.UserNotFoundException;
-import com.example.walkers.mapsturct.UserMapstruct;
 import com.example.walkers.model.User;
 import com.example.walkers.repository.UserRepository;
 import com.example.walkers.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,29 +20,28 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapstruct userMapstruct;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserRegisterResponse register(UserRegisterRequest request) {
-        if (userRepository.findUserByEmail(request.getEmail()).isPresent()){
-            throw new EmailAlreadyTakenException("Email already taken: "+request.getEmail());
+        if (userRepository.findUserByEmail(request.email()).isPresent()) {
+            throw new EmailAlreadyTakenException("Email already taken: " + request.email());
         }
-        if (userRepository.findUserByUsername(request.getEmail()).isPresent()){
-            throw new EmailAlreadyTakenException("Username already taken: "+request.getUsername());
+        if (userRepository.findUserByUsername(request.email()).isPresent()) {
+            throw new EmailAlreadyTakenException("Username already taken: " + request.username());
         }
-        if (!request.getPassword().equals(request.getRePassword())){
+        if (!request.password().equals(request.rePassword())) {
             throw new PasswordDoesntMatchException("Password doesn't matches");
         }
-        User user=userRepository.save(userMapstruct.toEntity(request));
-        return UserRegisterResponse.builder()
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .confirmed(user.getConfirmed())
-                .build();
+        User user = userRepository.save(UserRegisterRequest.toEntity(request, passwordEncoder.encode(request.password())));
+        return new UserRegisterResponse(
+                user.getEmail(),
+                user.getUsername(),
+                user.getConfirmed());
     }
 
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) {
         return userRepository.findUserByUsername(username)
-                .orElseThrow(()-> new UserNotFoundException("user not found"));
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
     }
 }

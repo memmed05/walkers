@@ -1,16 +1,16 @@
 package com.example.walkers.dto.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Comment;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class GetCommentsOfPostByIdResponse {
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-    private String comment;
-    private Long dayAgo;
+public record GetCommentsOfPostByIdResponse(
+        String comment,
+        Long dayAgo
+) {
+    public static GetCommentsOfPostByIdResponse convertToGetReponse(Comment comment) {
+        return new GetCommentsOfPostByIdResponse(comment.getComment(),
+                ChronoUnit.DAYS.between(LocalDateTime.now(), comment.getCreatedAt()));
+    }
 }

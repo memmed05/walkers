@@ -1,4 +1,4 @@
-package com.example.walkers.util;
+package com.example.walkers.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

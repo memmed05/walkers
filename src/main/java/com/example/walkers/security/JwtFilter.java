@@ -1,4 +1,4 @@
-package com.example.walkers.util;
+package com.example.walkers.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

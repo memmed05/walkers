@@ -1,19 +1,12 @@
 package com.example.walkers.dto.login;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class LoginRequest {
+public record LoginRequest(
 
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
+        @NotBlank
+        String username,
+        @NotBlank
+        String password
+) {
 }

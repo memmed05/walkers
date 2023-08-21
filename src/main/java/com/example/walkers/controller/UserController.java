@@ -2,7 +2,6 @@ package com.example.walkers.controller;
 
 import com.example.walkers.dto.user.UserRegisterRequest;
 import com.example.walkers.dto.user.UserRegisterResponse;
-import com.example.walkers.model.User;
 import com.example.walkers.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -19,9 +19,7 @@ public class LikeController {
 
     @PostMapping("{post}")
     public ResponseEntity<GetLikesOfPostByIdResponse> addLikeToPost(@PathVariable(name = "post") UUID id) {
-        return new ResponseEntity<>(likeService.addLike(AddLikeRequest.builder()
-                .id(id)
-                .build())
-                ,HttpStatus.CREATED);
+        return new ResponseEntity<>(likeService.addLike(new AddLikeRequest(id)),
+                HttpStatus.CREATED);
     }
 }

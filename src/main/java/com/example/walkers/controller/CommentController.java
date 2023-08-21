@@ -23,21 +23,16 @@ public class CommentController {
 
     @GetMapping("/{post}")
     public ResponseEntity<List<GetCommentsOfPostByIdResponse>> getCommentsOfPostById(@PathVariable(name = "post") UUID postId, @RequestParam UUID id) {
-        return ResponseEntity.ok(commentService.getCommentsOfPostById(GetCommentsOfPostByIdRequest.builder()
-                .id(id)
-                .postId(postId)
-                .build()));
+        return ResponseEntity.ok(commentService.getCommentsOfPostById(new GetCommentsOfPostByIdRequest(id, postId)));
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<List<GetCommentsOfPostByIdResponse>> addCommentToPost(@PathVariable UUID id, @RequestBody SaveCommentRequest request){
-        return new ResponseEntity<>(commentService.addComment(id, request),HttpStatus.CREATED);
+    public ResponseEntity<List<GetCommentsOfPostByIdResponse>> addCommentToPost(@PathVariable UUID id, @RequestBody SaveCommentRequest request) {
+        return new ResponseEntity<>(commentService.addComment(id, request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<IdResponse> deleteComment(@PathVariable UUID id){
-        return ResponseEntity.ok(commentService.deleteComment(IdRequest.builder()
-                .id(id)
-                .build()));
+    public ResponseEntity<IdResponse> deleteComment(@PathVariable UUID id) {
+        return ResponseEntity.ok(commentService.deleteComment(new IdRequest(id)));
     }
 }

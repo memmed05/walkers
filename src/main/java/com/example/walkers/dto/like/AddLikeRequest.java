@@ -1,17 +1,21 @@
 package com.example.walkers.dto.like;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.walkers.model.Like;
+import com.example.walkers.model.Post;
+import com.example.walkers.model.User;
 
 import java.util.UUID;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class AddLikeRequest {
-
-    private UUID id;
+public record AddLikeRequest(
+        UUID id
+) {
+    public static Like converToEnt(User user, Post post) {
+        return new Like(
+                null,
+                null,
+                null,
+                post,
+                user
+        );
+    }
 }

@@ -6,7 +6,6 @@ import com.example.walkers.dto.post.GetPostById;
 import com.example.walkers.dto.post.PostSaveDto;
 import com.example.walkers.dto.post.PostUpdateRequest;
 import com.example.walkers.exception.PostNotFoundException;
-import com.example.walkers.mapsturct.PostMapstruct;
 import com.example.walkers.model.Post;
 import com.example.walkers.model.User;
 import com.example.walkers.repository.PostRepository;
@@ -25,14 +24,13 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final PostMapstruct postMapstruct;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
     @Override
     public PostSaveDto savePost(PostSaveDto post) {
         User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
-        postRepository.save(postMapstruct.toEntity(post, user));
+        postRepository.save(PostSaveDto.toEntity(post, user));
         return post;
     }
 
@@ -44,9 +42,7 @@ public class PostServiceImpl implements PostService {
             return new PostNotFoundException("Post not found by id");
         });
         postRepository.deleteById(post.getId());
-        return IdResponse.builder()
-                .id(post.getId())
-                .build();
+        return new IdResponse(id);
     }
 
     @Override
@@ -56,18 +52,18 @@ public class PostServiceImpl implements PostService {
             log.error("Post not found by id: " + id);
             return new PostNotFoundException("Post not found by id");
         });
-        post.setDescription(postRequest.getDescription());
+        post.setDescription(postRequest.description());
 
-        return postMapstruct.mapToGet(postRepository.save(post));
+        return PostSaveDto.toGet(postRepository.save(post));
     }
 
     @Override
     public GetPostById getPostById(IdRequest request) {
         User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
-        Post post = postRepository.findByIdAndUser(request.getId(), user).orElseThrow(() -> {
-            log.error("Post not found by id: " + request.getId());
+        Post post = postRepository.findByIdAndUser(request.id(), user).orElseThrow(() -> {
+            log.error("Post not found by id: " + request.id());
             return new PostNotFoundException("Post not found by id");
         });
-        return postMapstruct.mapToGetAll(post);
+        return GetPostById.getPost(post);
     }
 }
