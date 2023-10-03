@@ -1,7 +1,9 @@
 package com.example.walkers.exception;
 
+import com.example.walkers.constants.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -51,5 +53,10 @@ public class CustomExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?>handleException(BadCredentialsException exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?>handleException(MethodArgumentNotValidException exception){
+        return new ResponseEntity<>(ErrorMessage.VALIDATION_FAILED_ERROR, HttpStatus.BAD_REQUEST);
     }
 }

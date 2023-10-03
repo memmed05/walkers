@@ -29,14 +29,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostSaveDto savePost(PostSaveDto post) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         postRepository.save(PostSaveDto.toEntity(post, user));
         return post;
     }
 
     @Override
     public IdResponse deletePost(UUID id) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Post post = postRepository.findByIdAndUser(id, user).orElseThrow(() -> {
             log.error("Post not found by id: " + id);
             return new PostNotFoundException("Post not found by id");
@@ -47,7 +47,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostSaveDto updatePost(PostUpdateRequest postRequest, UUID id) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Post post = postRepository.findByIdAndUser(id, user).orElseThrow(() -> {
             log.error("Post not found by id: " + id);
             return new PostNotFoundException("Post not found by id");
@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public GetPostById getPostById(IdRequest request) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Post post = postRepository.findByIdAndUser(request.id(), user).orElseThrow(() -> {
             log.error("Post not found by id: " + request.id());
             return new PostNotFoundException("Post not found by id");

@@ -22,7 +22,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userService.getUserByUsername(username);
+        User user=userService.getUserByUsernameOrEmail(username);
         List<SimpleGrantedAuthority> roles= Stream.of(user.getRole())
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .toList();

@@ -28,14 +28,14 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public SaveProfileResponse save(SaveProfileRequest request) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Profile profile = profileRepository.save(SaveProfileRequest.toEntity(request, user));
         return new SaveProfileResponse(profile.getId());
     }
 
     @Override
     public GetProfileResponse getProfileById(IdRequest request) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         return GetProfileResponse.mapToGet(profileRepository.findByIdAndUser(request.id(), user)
                 .orElseThrow(() -> {
                     log.error("User not found by id: " + request.id());
@@ -45,7 +45,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public SaveProfileResponse updateProfile(SaveProfileRequest profileRequest, UUID id) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Profile profile = profileRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id: " + id));
         profile.setName(profileRequest.name());

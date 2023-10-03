@@ -7,5 +7,5 @@ import com.example.walkers.model.User;
 public interface UserService {
     UserRegisterResponse register(UserRegisterRequest userRequest);
 
-    User getUserByUsername(String username);
+    User getUserByUsernameOrEmail(String usernameOrEmail);
 }

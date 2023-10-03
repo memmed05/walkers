@@ -5,7 +5,6 @@ import com.example.walkers.dto.user.UserRegisterRequest;
 import com.example.walkers.dto.user.UserRegisterResponse;
 import com.example.walkers.exception.EmailAlreadyTakenException;
 import com.example.walkers.exception.PasswordDoesntMatchException;
-import com.example.walkers.exception.UserNotFoundException;
 import com.example.walkers.model.User;
 import com.example.walkers.repository.UserRepository;
 import com.example.walkers.service.UserService;
@@ -13,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -40,8 +41,12 @@ public class UserServiceImpl implements UserService {
                 user.getConfirmed());
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("user not found"));
+    public User getUserByUsernameOrEmail(String usernameOrEmail) {
+        Optional<User> opUser = userRepository.findUserByUsername(usernameOrEmail);
+        if (opUser.isEmpty()) {
+            opUser = userRepository.findUserByEmail(usernameOrEmail);
+        }
+        return opUser.orElse(new User());
+
     }
 }

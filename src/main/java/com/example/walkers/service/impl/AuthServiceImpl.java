@@ -4,7 +4,6 @@ import com.example.walkers.dto.login.LoginRequest;
 import com.example.walkers.dto.login.LoginResponse;
 import com.example.walkers.security.TokenGenerator;
 import com.example.walkers.service.AuthService;
-import com.example.walkers.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserService userService;
     private final TokenGenerator tokenGenerator;
     private final AuthenticationManager authenticationManager;
 
@@ -24,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
+                    new UsernamePasswordAuthenticationToken(request.usernameOrEmail(), request.password())
             );
             return new LoginResponse(tokenGenerator.generateToken(authentication));
         } catch (Exception e) {

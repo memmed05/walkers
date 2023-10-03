@@ -17,4 +17,10 @@ public class JwtUtil {
         String token = authentication.getCredentials().toString();
         return tokenGenerator.verifyJWT(token).getSubject();
     }
+
+    public String getEmailFromToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getCredentials().toString();
+        return tokenGenerator.verifyJWT(token).getClaim("email").asString();
+    }
 }

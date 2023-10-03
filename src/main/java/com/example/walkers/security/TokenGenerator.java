@@ -34,7 +34,7 @@ public class TokenGenerator {
 
     public String generateToken(Authentication authentication) {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        User user = userService.getUserByUsername(username);
+        User user = userService.getUserByUsernameOrEmail(username);
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis()

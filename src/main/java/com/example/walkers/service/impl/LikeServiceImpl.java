@@ -36,7 +36,7 @@ public class LikeServiceImpl implements LikeService {
             log.error("Post not found by id: " + request.id());
             return new PostNotFoundException("Post not found by id");
         });
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Like like = likeRepository.save(AddLikeRequest.converToEnt(user, post));
         Optional<List<Like>> optionalLikes = likeRepository.findLikeByPost(like.getPost());
         List<Like> likes = new ArrayList<>();

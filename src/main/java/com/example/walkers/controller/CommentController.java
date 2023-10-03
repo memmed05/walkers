@@ -2,7 +2,6 @@ package com.example.walkers.controller;
 
 import com.example.walkers.dto.IdRequest;
 import com.example.walkers.dto.IdResponse;
-import com.example.walkers.dto.comment.GetCommentsOfPostByIdRequest;
 import com.example.walkers.dto.comment.GetCommentsOfPostByIdResponse;
 import com.example.walkers.dto.comment.SaveCommentRequest;
 import com.example.walkers.service.CommentService;
@@ -22,8 +21,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/{post}")
-    public ResponseEntity<List<GetCommentsOfPostByIdResponse>> getCommentsOfPostById(@PathVariable(name = "post") UUID postId, @RequestParam UUID id) {
-        return ResponseEntity.ok(commentService.getCommentsOfPostById(new GetCommentsOfPostByIdRequest(id, postId)));
+    public ResponseEntity<List<GetCommentsOfPostByIdResponse>> getCommentsOfPostById(@PathVariable(name = "post") UUID postId) {
+        return ResponseEntity.ok(commentService.getCommentsOfPostById(new IdRequest(postId)));
     }
 
     @PostMapping("/{id}")

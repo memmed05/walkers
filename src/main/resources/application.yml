@@ -16,7 +16,7 @@ spring:
 jwt-variables:
   KEY: authorization
   ISSUER: walkers
-  EXPIRES_ACCESS_TOKEN_MINUTE: 15
+  EXPIRES_ACCESS_TOKEN_MINUTE: 60
 
 
 

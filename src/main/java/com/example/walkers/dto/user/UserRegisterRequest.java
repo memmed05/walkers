@@ -3,10 +3,12 @@ package com.example.walkers.dto.user;
 import com.example.walkers.model.Role;
 import com.example.walkers.model.User;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserRegisterRequest(
         @Size(min = 3)
+        @Pattern(regexp = "[^@]*", message = "Invalid username format")
         String username,
         @Email(message = "Invalid email format")
         String email,

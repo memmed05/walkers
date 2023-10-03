@@ -2,7 +2,6 @@ package com.example.walkers.service.impl;
 
 import com.example.walkers.dto.IdRequest;
 import com.example.walkers.dto.IdResponse;
-import com.example.walkers.dto.comment.GetCommentsOfPostByIdRequest;
 import com.example.walkers.dto.comment.GetCommentsOfPostByIdResponse;
 import com.example.walkers.dto.comment.SaveCommentRequest;
 import com.example.walkers.exception.CommentNotFoundException;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,8 +34,14 @@ public class CommentServiceImpl implements CommentService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public List<GetCommentsOfPostByIdResponse> getCommentsOfPostById(GetCommentsOfPostByIdRequest request) {
-        return null;
+    public List<GetCommentsOfPostByIdResponse> getCommentsOfPostById(IdRequest request) {
+        Post post = postRepository.findById(request.id()).orElseThrow(() -> {
+            log.error("Post not found by id: " + request.id());
+            return new PostNotFoundException("Post not found by id");
+        });
+        return post.getComments().stream()
+                .map(GetCommentsOfPostByIdResponse::convertToGetReponse)
+                .toList();
     }
 
     @Override
@@ -46,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
             log.error("Post not found by id: " + id);
             return new PostNotFoundException("Post not found by id");
         });
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Comment comment = commentRepository.save(SaveCommentRequest.convertToEnt(request, post, user));
         Optional<List<Comment>> optionalComments = commentRepository.findCommentByPost(comment.getPost());
         List<Comment> comments = new ArrayList<>();
@@ -60,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public IdResponse deleteComment(IdRequest request) {
-        User user = userService.getUserByUsername(jwtUtil.getUsernameFromToken());
+        User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         commentRepository.findByIdAndUser(request.id(), user).orElseThrow(() -> {
             log.error("Comment not found by id: " + request.id());
             return new CommentNotFoundException("Comment not found by id");
