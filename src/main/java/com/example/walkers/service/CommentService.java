@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface CommentService {
     List<GetCommentsOfPostByIdResponse> getCommentsOfPostById(IdRequest request);
 
-    List<GetCommentsOfPostByIdResponse> addComment(UUID id, SaveCommentRequest request);
+    UUID addComment(UUID id, SaveCommentRequest request);
 
-    IdResponse deleteComment(IdRequest request);
+    Boolean deleteComment(IdRequest request);
 }

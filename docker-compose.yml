@@ -1,14 +1,32 @@
 version: '3.9'
 
 services:
-  app:
-    image: 'walkers-app:latest'
-    build:
-      context: .
+
+  db:
+    container_name: postgresql
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
     ports:
-      - "8080:8080"
-    networks:
-      - walkers-app
+      - 5432:5432
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+
+#  app:
+#    image: 'walkers-app:latest'
+#    build:
+#      context: .
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - walkers-app
 
 networks:
   walkers-app:

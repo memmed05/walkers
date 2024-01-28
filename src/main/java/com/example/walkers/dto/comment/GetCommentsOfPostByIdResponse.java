@@ -7,10 +7,12 @@ import java.time.temporal.ChronoUnit;
 
 public record GetCommentsOfPostByIdResponse(
         String comment,
-        Long dayAgo
+        Long dayAgo,
+        String username
 ) {
-    public static GetCommentsOfPostByIdResponse convertToGetReponse(Comment comment) {
+    public static GetCommentsOfPostByIdResponse convertToGetResponse(Comment comment) {
         return new GetCommentsOfPostByIdResponse(comment.getComment(),
-                ChronoUnit.DAYS.between(LocalDateTime.now(), comment.getCreatedAt()));
+                ChronoUnit.DAYS.between(LocalDateTime.now(), comment.getCreatedAt()),
+                comment.getUser().getUsername());
     }
 }

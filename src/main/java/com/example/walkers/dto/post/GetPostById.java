@@ -4,22 +4,25 @@ import com.example.walkers.dto.comment.GetCommentsOfPostByIdResponse;
 import com.example.walkers.model.Post;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public record GetPostById(
+        String username,
         String postUrl,
         String description,
-        List<GetCommentsOfPostByIdResponse> comments
+        List<GetCommentsOfPostByIdResponse> comments,
+        Integer likes
 ) {
     public static GetPostById getPost(Post post) {
         List<GetCommentsOfPostByIdResponse> commentsOfPostById = post.getComments().stream()
-                .map(GetCommentsOfPostByIdResponse::convertToGetReponse)
+                .map(GetCommentsOfPostByIdResponse::convertToGetResponse)
                 .toList();
         return new GetPostById(
+                post.getUser().getUsername(),
                 post.getPostUrl(),
                 post.getDescription(),
-                commentsOfPostById
+                commentsOfPostById,
+                post.getLikes().size()
         );
     }
 }

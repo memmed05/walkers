@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface LikeRepository extends JpaRepository<Like, UUID> {
 
     Optional<List<Like>> findLikeByPost(Post post);
+
+    Boolean deleteLikeByUserUsernameAndPostId(String username, UUID uuid);
 }

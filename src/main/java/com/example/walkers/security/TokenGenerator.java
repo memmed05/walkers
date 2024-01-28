@@ -32,6 +32,9 @@ public class TokenGenerator {
     @Value("${jwt-variables.EXPIRES_ACCESS_TOKEN_MINUTE}")
     private byte EXPIRES_ACCESS_TOKEN_MINUTE;
 
+    @Value("${jwt-variables.EXPIRES_REFRESH_TOKEN_MINUTE}")
+    private byte EXPIRES_REFRESH_TOKEN_MINUTE;
+
     public String generateToken(Authentication authentication) {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         User user = userService.getUserByUsernameOrEmail(username);
@@ -41,6 +44,17 @@ public class TokenGenerator {
                         + (EXPIRES_ACCESS_TOKEN_MINUTE * 60 * 1000)))
                 .withIssuer(ISSUER)
                 .withClaim("email", user.getEmail())
+                .sign(Algorithm.HMAC256(KEY.getBytes()));
+    }
+
+    public String generateRefreshToke(Authentication authentication) {
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        User user = userService.getUserByUsernameOrEmail(username);
+        return JWT.create()
+                .withSubject(username)
+                .withExpiresAt(new Date(System.currentTimeMillis()
+                        + (EXPIRES_REFRESH_TOKEN_MINUTE * 60 * 1000)))
+                .withIssuer(ISSUER)
                 .sign(Algorithm.HMAC256(KEY.getBytes()));
     }
 

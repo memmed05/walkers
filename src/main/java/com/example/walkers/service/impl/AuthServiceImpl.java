@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.usernameOrEmail(), request.password())
             );
-            return new LoginResponse(tokenGenerator.generateToken(authentication));
+            return new LoginResponse(tokenGenerator.generateToken(authentication),tokenGenerator.generateRefreshToke(authentication));
         } catch (Exception e) {
             throw new BadCredentialsException("Bad Credentials");
         }

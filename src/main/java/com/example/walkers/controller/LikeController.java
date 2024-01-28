@@ -1,7 +1,7 @@
 package com.example.walkers.controller;
 
 import com.example.walkers.dto.like.AddLikeRequest;
-import com.example.walkers.dto.like.GetLikesOfPostByIdResponse;
+import com.example.walkers.dto.like.LikeDto;
 import com.example.walkers.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,14 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("{post}")
-    public ResponseEntity<GetLikesOfPostByIdResponse> addLikeToPost(@PathVariable(name = "post") UUID id) {
+    @PostMapping("/{post}")
+    public ResponseEntity<Integer> addLikeToPost(@PathVariable(name = "post") UUID id) {
         return new ResponseEntity<>(likeService.addLike(new AddLikeRequest(id)),
                 HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{post}")
+    public ResponseEntity<Boolean> deleteLikeFromPost(@PathVariable(name = "post") UUID id){
+        return new ResponseEntity<>(likeService.deleteLike(id), HttpStatus.OK);
     }
 }

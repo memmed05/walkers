@@ -1,7 +1,7 @@
 package com.example.walkers.controller;
 
 import com.example.walkers.dto.IdRequest;
-import com.example.walkers.dto.IdResponse;
+import com.example.walkers.dto.post.PostSaveResponse;
 import com.example.walkers.dto.post.GetPostById;
 import com.example.walkers.dto.post.PostSaveDto;
 import com.example.walkers.dto.post.PostUpdateRequest;
@@ -22,12 +22,12 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostSaveDto> savePost(@Valid @RequestBody PostSaveDto post){
+    public ResponseEntity<PostSaveResponse> savePost(@Valid @RequestBody PostSaveDto post){
         return new ResponseEntity<>(postService.savePost(post), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostSaveDto> updatePost(@Valid @RequestBody PostUpdateRequest postRequest,
+    public ResponseEntity<PostSaveResponse> updatePost(@Valid @RequestBody PostUpdateRequest postRequest,
                                                   @PathVariable UUID id){
         return ResponseEntity.ok(postService.updatePost(postRequest, id));
     }
@@ -38,7 +38,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<IdResponse> deletePost(@PathVariable UUID id){
+    public ResponseEntity<Boolean> deletePost(@PathVariable UUID id){
         return ResponseEntity.ok(postService.deletePost(id));
     }
 

@@ -1,8 +1,11 @@
 package com.example.walkers.service;
 
 import com.example.walkers.dto.like.AddLikeRequest;
-import com.example.walkers.dto.like.GetLikesOfPostByIdResponse;
+
+import java.util.UUID;
 
 public interface LikeService {
-    GetLikesOfPostByIdResponse addLike(AddLikeRequest request);
+    Integer addLike(AddLikeRequest request);
+
+    Boolean deleteLike(UUID id);
 }

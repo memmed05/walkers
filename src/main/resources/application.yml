@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5532/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 123456
   jpa:
@@ -12,11 +12,19 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 jwt-variables:
   KEY: authorization
   ISSUER: walkers
   EXPIRES_ACCESS_TOKEN_MINUTE: 60
+  EXPIRES_REFRESH_TOKEN_MINUTE: 10080
+
 
 
 

@@ -1,7 +1,7 @@
 package com.example.walkers.service.impl;
 
 import com.example.walkers.dto.IdRequest;
-import com.example.walkers.dto.IdResponse;
+import com.example.walkers.dto.post.PostSaveResponse;
 import com.example.walkers.dto.post.GetPostById;
 import com.example.walkers.dto.post.PostSaveDto;
 import com.example.walkers.dto.post.PostUpdateRequest;
@@ -28,25 +28,24 @@ public class PostServiceImpl implements PostService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public PostSaveDto savePost(PostSaveDto post) {
+    public PostSaveResponse savePost(PostSaveDto post) {
         User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
-        postRepository.save(PostSaveDto.toEntity(post, user));
-        return post;
+        return PostSaveResponse.map(postRepository.save(PostSaveDto.toEntity(post, user)));
     }
 
     @Override
-    public IdResponse deletePost(UUID id) {
+    public Boolean deletePost(UUID id) {
         User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Post post = postRepository.findByIdAndUser(id, user).orElseThrow(() -> {
             log.error("Post not found by id: " + id);
             return new PostNotFoundException("Post not found by id");
         });
         postRepository.deleteById(post.getId());
-        return new IdResponse(id);
+        return true;
     }
 
     @Override
-    public PostSaveDto updatePost(PostUpdateRequest postRequest, UUID id) {
+    public PostSaveResponse updatePost(PostUpdateRequest postRequest, UUID id) {
         User user = userService.getUserByUsernameOrEmail(jwtUtil.getUsernameFromToken());
         Post post = postRepository.findByIdAndUser(id, user).orElseThrow(() -> {
             log.error("Post not found by id: " + id);
@@ -54,7 +53,7 @@ public class PostServiceImpl implements PostService {
         });
         post.setDescription(postRequest.description());
 
-        return PostSaveDto.toGet(postRepository.save(post));
+        return PostSaveResponse.map(post);
     }
 
     @Override

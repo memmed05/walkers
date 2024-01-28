@@ -16,4 +16,6 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
     Optional<List<Comment>> findCommentByPost(Post post);
 
     Optional<Comment> findByIdAndUser(UUID id, User user);
+
+    Boolean deleteCommentByIdAndUserUsername(UUID id, String username);
 }

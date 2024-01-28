@@ -26,12 +26,12 @@ public class CommentController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<List<GetCommentsOfPostByIdResponse>> addCommentToPost(@PathVariable UUID id, @RequestBody SaveCommentRequest request) {
+    public ResponseEntity<UUID> addCommentToPost(@PathVariable UUID id, @RequestBody SaveCommentRequest request) {
         return new ResponseEntity<>(commentService.addComment(id, request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<IdResponse> deleteComment(@PathVariable UUID id) {
+    public ResponseEntity<Boolean> deleteComment(@PathVariable UUID id) {
         return ResponseEntity.ok(commentService.deleteComment(new IdRequest(id)));
     }
 }
