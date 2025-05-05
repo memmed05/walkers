@@ -30,10 +30,10 @@ public class TokenGenerator {
     private String ISSUER;
 
     @Value("${jwt-variables.EXPIRES_ACCESS_TOKEN_MINUTE}")
-    private byte EXPIRES_ACCESS_TOKEN_MINUTE;
+    private int EXPIRES_ACCESS_TOKEN_MINUTE;
 
     @Value("${jwt-variables.EXPIRES_REFRESH_TOKEN_MINUTE}")
-    private byte EXPIRES_REFRESH_TOKEN_MINUTE;
+    private int EXPIRES_REFRESH_TOKEN_MINUTE;
 
     public String generateToken(Authentication authentication) {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
